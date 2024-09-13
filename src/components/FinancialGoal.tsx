@@ -11,7 +11,7 @@ export default function FinancialGoal() {
   const [result, setResult] = useState<MonthsAndYears>({ months: 0, years: 0 });
 
   return (
-    <div className="grid h-full grid-cols-[minmax(auto,400px)_1fr] gap-6">
+    <div className="grid h-full gap-6 md:grid-cols-[minmax(auto,400px)_1fr]">
       <div className="">
         <GoalForm setResult={setResult} />
       </div>

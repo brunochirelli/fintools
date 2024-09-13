@@ -1,17 +1,11 @@
-import {
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  ShoppingCart,
-  Users,
-} from "lucide-react";
+"use client";
+
+import { Home, Menu, Package2 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import Navbar from "@/components/Navbar";
 import SupportBanner from "@/components/SupportBanner";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,8 +22,10 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -61,48 +57,22 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               <nav className="grid gap-2 text-lg font-medium">
                 <Link
                   className="flex items-center gap-2 text-lg font-semibold"
-                  href="#"
+                  href="/smart-goal"
                 >
                   <Package2 className="h-6 w-6" />
                   <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Link
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                  href="#"
+                  className={cn(
+                    "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
+                    {
+                      "bg-muted": pathname === "/smart-goal",
+                    },
+                  )}
+                  href="/smart-goal"
                 >
                   <Home className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-                  href="#"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Orders
-                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                    6
-                  </Badge>
-                </Link>
-                <Link
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                  href="#"
-                >
-                  <Package className="h-5 w-5" />
-                  Products
-                </Link>
-                <Link
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                  href="#"
-                >
-                  <Users className="h-5 w-5" />
-                  Customers
-                </Link>
-                <Link
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                  href="#"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Analytics
+                  Fortune Planner
                 </Link>
               </nav>
               <div className="mt-auto">
