@@ -18,30 +18,11 @@ const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
           className,
         )}
         decimalsLimit={2}
-        defaultValue={1000}
-        onValueChange={(value, name, values) =>
-          console.log(value, name, values)
-        }
         {...props}
       />
     );
   },
 );
-// const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
-//   ({ className, type, ...props }, ref) => {
-//     return (
-//       <CurrencyInput
-//         ref={ref}
-//         className={cn(
-//           "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-//           className,
-//         )}
-//         type={type}
-//         {...props}
-//       />
-//     );
-//   },
-// );
 MoneyInput.displayName = "MoneyInput";
 
 export { MoneyInput };

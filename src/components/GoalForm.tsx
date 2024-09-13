@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 
-import { parseAsFloat, parseAsInteger, useQueryState } from "nuqs";
 import type { CurrencyInputOnChangeValues } from "react-currency-input-field";
 
-import { calculateFinancialGoal } from "@/lib/financial-goal";
+import { useInvestmentGoal } from "@/hooks/useInvestmentGoal";
+import { calculateInvestmentGoal } from "@/lib/financial-goal";
 import type { MonthsAndYears } from "@/types";
 
 import { Label } from "./ui/label";
@@ -21,48 +21,29 @@ export default function GoalForm({ setResult }: GoalFormProps) {
     currency: "BRL",
   };
 
-  const [interestRate, setInterestRate] = useQueryState(
-    "i",
-    parseAsFloat.withDefault(11.25),
-  );
-  const [finalValue, setFinalValue] = useQueryState(
-    "vf",
-    parseAsInteger.withDefault(500000),
-  );
-  const [monthlyInvestment, setMonthlyInvestment] = useQueryState(
-    "mi",
-    parseAsInteger.withDefault(1000),
-  );
+  const [
+    { finalValue, interestRate, monthlyInvestment, initialValue },
+    setValues,
+  ] = useInvestmentGoal();
 
   const handleMoneyChange = (
-    value: string | undefined,
-    name?: string | undefined,
+    _: string | undefined,
+    name: string | undefined,
     options?: CurrencyInputOnChangeValues | undefined,
   ) => {
-    console.log(value, name, options);
-    switch (name) {
-      case "interestRate":
-        setInterestRate(!!value ? Number(options?.float) : 0);
-        break;
-      case "final-value":
-        setFinalValue(!!value ? Number(value) : 0);
-        break;
-      case "monthlyInvestment":
-        setMonthlyInvestment(!!value ? Number(value) : 0);
-      default:
-        break;
-    }
+    setValues({ [name as string]: Number(options?.float) });
   };
 
   useEffect(() => {
     setResult(
-      calculateFinancialGoal({
+      calculateInvestmentGoal({
         interestRate,
         finalValue,
         monthlyInvestment,
+        initialValue,
       }),
     );
-  }, [interestRate, finalValue, monthlyInvestment, setResult]);
+  }, [interestRate, finalValue, monthlyInvestment, setResult, initialValue]);
 
   return (
     <form className="grid w-full items-start gap-6 overflow-auto p-4 pt-0">
@@ -71,8 +52,7 @@ export default function GoalForm({ setResult }: GoalFormProps) {
         <div className="grid gap-3">
           <Label htmlFor="interestRate">Taxa de juros</Label>
           <MoneyInput
-            decimalsLimit={2}
-            defaultValue={11.25}
+            defaultValue={interestRate}
             id="interestRate"
             name="interestRate"
             placeholder="Adicione um valor"
@@ -83,11 +63,10 @@ export default function GoalForm({ setResult }: GoalFormProps) {
         <div className="grid gap-3">
           <Label htmlFor="finalValue">Valor desejado</Label>
           <MoneyInput
-            decimalsLimit={2}
-            defaultValue={1000000}
-            id="final-value"
+            defaultValue={finalValue}
+            id="finalValue"
             intlConfig={intlConfig}
-            name="final-value"
+            name="finalValue"
             placeholder="Adicione um valor"
             onValueChange={handleMoneyChange}
           />
@@ -95,10 +74,21 @@ export default function GoalForm({ setResult }: GoalFormProps) {
         <div className="grid gap-3">
           <Label htmlFor="monthlyInvestment">Investimento mensal</Label>
           <MoneyInput
-            decimalsLimit={2}
+            defaultValue={monthlyInvestment}
             id="monthlyInvestment"
             intlConfig={intlConfig}
             name="monthlyInvestment"
+            placeholder="Adicione um valor"
+            onValueChange={handleMoneyChange}
+          />
+        </div>
+        <div className="grid gap-3">
+          <Label htmlFor="initialValue">Valor inicial</Label>
+          <MoneyInput
+            defaultValue={initialValue}
+            id="initialValue"
+            intlConfig={intlConfig}
+            name="initialValue"
             placeholder="Adicione um valor"
             onValueChange={handleMoneyChange}
           />
