@@ -4,15 +4,14 @@ import { useEffect } from "react";
 
 import type { CurrencyInputOnChangeValues } from "react-currency-input-field";
 
-import { useInvestmentGoal } from "@/hooks/useInvestmentGoal";
-import { calculateInvestmentGoal } from "@/lib/financial-goal";
-import type { MonthsAndYears } from "@/types";
+import { useNecessaryMoney } from "@/hooks/useNecessaryMoney";
+import { calculateRequiredAmount } from "@/lib/necessary-money";
 
 import { Label } from "./ui/label";
 import { MoneyInput } from "./ui/money-input";
 
 type NecessaryMoneyFormProps = {
-  setResult: React.Dispatch<React.SetStateAction<MonthsAndYears>>;
+  setResult: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function NecessaryMoneyForm({
@@ -23,10 +22,7 @@ export default function NecessaryMoneyForm({
     currency: "BRL",
   };
 
-  const [
-    { finalValue, interestRate, monthlyInvestment, initialValue },
-    setValues,
-  ] = useInvestmentGoal();
+  const [{ desiredDividend, dividendYield }, setValues] = useNecessaryMoney();
 
   const handleMoneyChange = (
     _: string | undefined,
@@ -38,59 +34,35 @@ export default function NecessaryMoneyForm({
 
   useEffect(() => {
     setResult(
-      calculateInvestmentGoal({
-        interestRate,
-        finalValue,
-        monthlyInvestment,
-        initialValue,
+      calculateRequiredAmount({
+        desiredDividend,
+        dividendYield,
       }),
     );
-  }, [interestRate, finalValue, monthlyInvestment, setResult, initialValue]);
+  }, [desiredDividend, dividendYield, setResult]);
 
   return (
     <form className="grid w-full items-start gap-6 overflow-auto p-4 pt-0">
       <fieldset className="grid gap-6 rounded-lg border p-4">
         <legend className="-ml-1 px-1 text-sm font-medium">Dados</legend>
         <div className="grid gap-3">
-          <Label htmlFor="interestRate">Taxa de juros</Label>
+          <Label htmlFor="dividendYield">Dividend Yield</Label>
           <MoneyInput
-            defaultValue={interestRate}
-            id="interestRate"
-            name="interestRate"
+            defaultValue={dividendYield}
+            id="dividendYield"
+            name="dividendYield"
             placeholder="Adicione um valor"
             suffix="%"
             onValueChange={handleMoneyChange}
           />
         </div>
         <div className="grid gap-3">
-          <Label htmlFor="finalValue">Valor desejado</Label>
+          <Label htmlFor="desiredDividend">Valor desejado</Label>
           <MoneyInput
-            defaultValue={finalValue}
-            id="finalValue"
+            defaultValue={desiredDividend}
+            id="desiredDividend"
             intlConfig={intlConfig}
-            name="finalValue"
-            placeholder="Adicione um valor"
-            onValueChange={handleMoneyChange}
-          />
-        </div>
-        <div className="grid gap-3">
-          <Label htmlFor="monthlyInvestment">Investimento mensal</Label>
-          <MoneyInput
-            defaultValue={monthlyInvestment}
-            id="monthlyInvestment"
-            intlConfig={intlConfig}
-            name="monthlyInvestment"
-            placeholder="Adicione um valor"
-            onValueChange={handleMoneyChange}
-          />
-        </div>
-        <div className="grid gap-3">
-          <Label htmlFor="initialValue">Valor inicial</Label>
-          <MoneyInput
-            defaultValue={initialValue}
-            id="initialValue"
-            intlConfig={intlConfig}
-            name="initialValue"
+            name="desiredDividend"
             placeholder="Adicione um valor"
             onValueChange={handleMoneyChange}
           />
