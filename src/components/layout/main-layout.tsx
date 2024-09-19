@@ -4,8 +4,6 @@ import { Home, Menu, Package2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import Navbar from "@/components/Navbar";
-import SupportBanner from "@/components/SupportBanner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,22 +22,14 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
+import DesktopNav from "./DesktopNav";
+import { NAV_LINKS } from "./nav-links";
+
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r bg-muted/40 md:block">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link className="flex items-center gap-2 font-semibold" href="/">
-              <Package2 className="h-6 w-6" />
-              <span className="">Fintools</span>
-            </Link>
-          </div>
-          <Navbar />
-          <SupportBanner />
-        </div>
-      </div>
+      <DesktopNav />
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <Sheet>
@@ -62,18 +52,21 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                   <Package2 className="h-6 w-6" />
                   <span className="sr-only">Acme Inc</span>
                 </Link>
-                <Link
-                  className={cn(
-                    "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
-                    {
-                      "bg-muted": pathname === "/smart-goal",
-                    },
-                  )}
-                  href="/smart-goal"
-                >
-                  <Home className="h-5 w-5" />
-                  Fortune Planner
-                </Link>
+                {NAV_LINKS.map((item, i) => (
+                  <Link
+                    key={item.name + i}
+                    className={cn(
+                      "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
+                      {
+                        "bg-muted": pathname === item.path,
+                      },
+                    )}
+                    href={item.path}
+                  >
+                    <Home className="h-5 w-5" />
+                    {item.name}
+                  </Link>
+                ))}
               </nav>
               <div className="mt-auto">
                 <Card>
