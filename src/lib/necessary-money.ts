@@ -6,7 +6,7 @@ export function calculateRequiredAmount({
   dividendYield: number;
 }) {
   // Converte a dividend yield de percentual para decimal
-  const yieldRate = dividendYield / 100;
+  const yieldRate = dividendYield / 100 / 12;
 
   // Calcula o montante necessário
   const requiredAmount = desiredDividend / yieldRate;
